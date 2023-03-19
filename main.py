@@ -1,5 +1,4 @@
 import asyncio
-from pprint import pprint
 import aiohttp
 import datetime
 from dotenv import load_dotenv
@@ -7,7 +6,7 @@ import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.session import sessionmaker
-from sqlalchemy import JSON, Integer, Column, String
+from sqlalchemy import Integer, Column, String
 
 
 load_dotenv()
@@ -68,7 +67,6 @@ async def get_people(id, session):
             'starships': ', '.join([starship['name'] for starship in list_data[3]]),
             'vehicles': ', '.join([vehicle['name'] for vehicle in list_data[4]]),
         }
-        # pprint(hero)
         return hero
 
 
@@ -78,7 +76,6 @@ async def main():
     async with aiohttp.ClientSession() as session:
         coros = [get_people(i, session) for i in range(1, 2)]
         results = await asyncio.gather(*coros)
-    # print(results, sep='\n')
     for result in results:
         async with Session() as session:
             session.add(SwapiPeople(**result))
